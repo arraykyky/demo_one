@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.management.dao.HospitalNameAbbreviationInfoDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.management.domain.HospitalNameAbbreviationInfo">
+        <id column="hi_id" property="hiId" />
+        <result column="hi_name" property="hiName" />
+        <result column="hi_abbreviation" property="hiAbbreviation" />
+        <result column="hi_area" property="hiArea" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        hi_id, hi_name, hi_abbreviation, hi_area
+    </sql>
+
+    <select id="selectHospitalNameAbbreviationByHiAbbreviation" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_hospital_name_abbreviation_info
+        WHERE
+          hi_abbreviation = #{hiAbbreviation}
+        LIMIT 1
+    </select>
+
+</mapper>

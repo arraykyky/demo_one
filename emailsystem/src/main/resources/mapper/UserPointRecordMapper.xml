@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.emailsystem.dao.UserPointRecordDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.emailsystem.domain.UserPointRecord">
+        <id column="record_id" property="recordId" />
+        <result column="user_id" property="userId" />
+        <result column="record_time" property="recordTime" />
+        <result column="consume_type" property="consumeType" />
+        <result column="add_money" property="addMoney" />
+        <result column="history_point_count" property="historyPointCount" />
+        <result column="consume_point_count" property="consumePointCount" />
+        <result column="enable_use_point_number" property="enableUsePointNumber" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        record_id, user_id, record_time, consume_type, add_money, history_point_count, consume_point_count, enable_use_point_number
+    </sql>
+
+    <insert id="insertPointRecord">
+        insert into fd_user_point_record(
+            record_id,
+            user_id,
+            record_time,
+            consume_type,
+            add_money,
+            history_point_count,
+            consume_point_count,
+            enable_use_point_number
+        )values (
+            #{recordId},
+            #{userId},
+            #{recordTime},
+            #{consumeType},
+            #{addMoney},
+            #{historyPointCount},
+            #{consumePointCount},
+            #{enableUsePointNumber}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.UserDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.User">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="user_password" property="userPassword" />
+        <result column="user_open_id" property="userOpenId"/>
+        <result column="user_real_name" property="userRealName" />
+        <result column="user_ID_card_num" property="userIdCardNum" />
+        <result column="user_phone" property="userPhone" />
+        <result column="user_email" property="userEmail" />
+        <result column="research_field" property="researchField" />
+        <result column="hospital_id" property="hospitalId" />
+        <result column="dept_id" property="deptId" />
+        <result column="before_department_name" property="beforeDepartmentName" />
+        <result column="positional_titles" property="positionalTitles" />
+        <result column="out_time" property="outTime" />
+        <result column="notes" property="notes" />
+        <result column="enable_use_point_number" property="enableUsePointNumber" />
+        <result column="user_type" property="userType" />
+        <result column="is_limit_flow" property="isLimitFlow" />
+        <result column="date_flow" property="dateFlow" />
+        <result column="is_limit_total_piece_num" property="isLimitTotalPieceNum" />
+        <result column="total_piece_num" property="totalPieceNum" />
+        <result column="user_state" property="userState" />
+        <result column="job_no" property="jobNo" />
+        <result column="ella_user_id" property="ellaUserId" />
+        <result column="user_belongto_adminId" property="userBelongtoAdminid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, user_name, user_password,user_open_id, user_real_name, user_ID_card_num, user_phone, user_email, research_field, hospital_id, dept_id, before_department_name, positional_titles, out_time, notes, enable_use_point_number, user_type, is_limit_flow, date_flow, is_limit_total_piece_num, total_piece_num, user_state, job_no, ella_user_id, user_belongto_adminId
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Ella_Column_List">
+        user_id AS userId,
+        user_name AS userName,
+        user_real_name AS userRealName,
+        user_ID_card_num AS userIdCardNum,
+        user_phone AS userPhone,
+        user_email AS userEmail,
+        research_field AS researchField,
+        hospital_id AS hospitalId,
+        dept_id AS deptId,
+        before_department_name AS beforeDepartmentName,
+        positional_titles AS positionalTitles,
+        out_time AS outTime,
+        notes,
+        enable_use_point_number AS enableUsePointNumber,
+        user_type AS userType,
+        is_limit_flow AS isLimitFlow,
+        date_flow AS dateFlow,
+        is_limit_total_piece_num AS isLimitTotalPieceNum,
+        total_piece_num AS totalPieceNum,
+        user_state AS userState,
+        job_no AS jobNo,
+        ella_user_id AS ellaUserId
+    </sql>
+
+    <select id="selectUserByEllaUserId" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_user
+        WHERE
+          ella_user_id = #{ellaUserId}
+    </select>
+
+    <update id="updatePassWordByElleUserId">
+        UPDATE
+          fd_user
+        SET
+          user_password = #{userPassword}
+        WHERE
+          ella_user_id = #{ellaUserId}
+    </update>
+
+    <!--ella通过hessian远程添加用户-->
+    <insert id="saveUser" parameterType="pd">
+        insert into fd_user(
+            user_id,
+            user_name,
+            user_password,
+            user_real_name,
+            user_ID_card_num,
+            user_phone,
+            user_email,
+            research_field,
+            hospital_id,
+            dept_id,
+            before_department_name,
+            positional_titles,
+            out_time,
+            notes,
+            user_type,
+            is_limit_flow,
+            date_flow,
+            is_limit_total_piece_num,
+            total_piece_num,
+            user_state,
+            job_no,
+            ella_user_id,
+            user_belongto_adminId
+        )values (
+            #{id},
+            #{loginName},
+            #{password},
+            #{userName},
+            #{userIdCardNum},
+            #{telephone},
+            #{userEmail},
+            #{researchField},
+            #{hospitalId},
+            #{deptId},
+            #{beforeDepartmentName},
+            #{positionalTitles},
+            #{outTime},
+            #{notes},
+            #{userType},
+            #{isLimitFlow},
+            #{dateFlow},
+            #{isLimitTotalPieceNum},
+            #{totalPieceNum},
+            #{state},
+            #{jobNo},
+            #{userId},
+            #{userBelongToAdminId}
+        )
+    </insert>
+
+    <update id="updataForeignDataUser" parameterType="pd">
+        UPDATE
+            fd_user
+        SET
+            user_name = #{loginName},
+            user_password = #{password},
+            user_real_name = #{userName},
+            user_ID_card_num = #{userIdCardNum},
+            user_phone = #{telephone},
+            user_email = #{userEmail},
+            research_field = #{researchField},
+            hospital_id = #{hospitalId},
+            dept_id = #{deptId},
+            before_department_name = #{beforeDepartmentName},
+            positional_titles = #{positionalTitles},
+            out_time = #{outTime},
+            notes = #{notes},
+
+            user_type = #{userType},
+            is_limit_flow = #{isLimitFlow},
+            date_flow = #{dateFlow},
+            is_limit_total_piece_num = #{isLimitTotalPieceNum},
+            total_piece_num = #{totalPieceNum},
+            user_state = #{state},
+            job_no = #{jobNo}
+        WHERE
+            ella_user_id = #{userId}
+    </update>
+
+    <select id="findForeignDataUser" parameterType="pd" resultType="pd">
+        SELECT
+        <include refid="Ella_Column_List"/>
+        FROM
+        fd_user
+        WHERE
+        ella_user_id = #{userId}
+    </select>
+
+    <select id="selectUserByOpenId" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_user
+        WHERE
+          user_open_id = #{userOpenId}
+        LIMIT 1
+    </select>
+
+    <select id="selectUserByPhoneNumber" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_user
+        WHERE
+          user_phone = #{userPhone}
+    </select>
+
+</mapper>

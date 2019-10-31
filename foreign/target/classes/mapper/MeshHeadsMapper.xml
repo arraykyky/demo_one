@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.MeshHeadsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.MeshHeads">
+        <id column="id" property="id" />
+        <result column="menu_parent_id" property="menuParentId" />
+        <result column="menu_id" property="menuId" />
+        <result column="descriptor_UI" property="descriptorUi" />
+        <result column="descriptor_name" property="descriptorName" />
+        <result column="descriptor_name_CH" property="descriptorNameCh" />
+        <result column="sub_mesh_heads" property="subMeshHeads" />
+        <result column="scope_note" property="scopeNote" />
+        <result column="scope_note_CH" property="scopeNoteCh" />
+        <result column="terms" property="terms" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, menu_parent_id, menu_id, descriptor_UI, descriptor_name, descriptor_name_CH, sub_mesh_heads, scope_note, scope_note_CH, terms
+    </sql>
+
+    <select id="selectMeshHeadsMenuByMenuParentId" resultMap="BaseResultMap">
+        SELECT
+          id,menu_parent_id,menu_id,descriptor_name,descriptor_name_CH
+        FROM
+          fd_mesh_heads
+        WHERE
+          menu_parent_id = #{menuParentId}
+        ORDER BY
+          menu_id
+        ASC
+    </select>
+
+    <select id="selectSearchMeshHeads" resultMap="BaseResultMap">
+        SELECT
+          id,menu_parent_id,menu_id,descriptor_name,descriptor_name_CH
+        FROM
+          fd_mesh_heads
+        WHERE
+          1=1
+        <if test="pd.descriptorName != null and pd.descriptorName !=''">
+          AND MATCH(descriptor_name) AGAINST(#{pd.descriptorName})
+        </if>
+    </select>
+
+</mapper>

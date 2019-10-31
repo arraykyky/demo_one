@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.SeniorLimiteConditionsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.SeniorLimiteConditions">
+        <id column="limite_id" property="limiteId" />
+        <result column="limite_field_num" property="limiteFieldNum" />
+        <result column="limite_en_world" property="limiteEnWorld" />
+        <result column="limite_ch_world" property="limiteChWorld" />
+        <result column="limite_group_num" property="limiteGroupNum" />
+        <result column="limite_group_name" property="limiteGroupName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        limite_id, limite_field_num, limite_en_world, limite_ch_world, limite_group_num, limite_group_name
+    </sql>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_senior_limite_conditions
+        WHERE
+          1=1
+        <if test="limiteGroupNum != null and limiteGroupNum != ''">
+            AND limite_group_num = #{limiteGroupNum}
+        </if>
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        fd_senior_limite_conditions
+        WHERE
+        1=1
+        <if test="pd.limiteGroupNum != null and pd.limiteGroupNum != ''">
+            AND limite_group_num = #{pd.limiteGroupNum}
+        </if>
+    </select>
+
+</mapper>

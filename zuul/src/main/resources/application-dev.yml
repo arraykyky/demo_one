@@ -1,0 +1,63 @@
+server:
+  port: 5001
+spring:
+  application:
+    name: zuul-center
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  redis:
+    host: 47.110.154.181
+    port: 6379
+    password: book2018@redis
+    database: 12
+    timeout: 60000ms
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9001/eureka/
+###########################################zuul配置#########################################################
+ribbon: #设置ribbon的超时时间小于zuul的超时时间,解决：504 Gateway Timeout --> Hystrix Readed time out
+  ReadTimeout: 120000
+  ConnectTimeout: 120000
+zuul:
+  host:
+    #链接超时时间
+    connect-timeout-millis: 180000
+    #socket超时时间
+    socket-timeout-millis: 180000
+    #http连接池大小
+    max-total-connections: 200
+    #定义每个host最大连接数
+    max-per-route-connections: 20
+  #前缀
+  #prefix: /book
+  #网关忽略服务
+  #ignored-services:
+  #限流
+  ribbon-isolation-strategy: semaphore #信号量
+  #最大信号量 配置了限流后在后面配置hystrix就没有效果了
+  semaphore:
+    max-semaphores: 100
+###########################################zuul转发#########################################################
+  routes:
+    management-route:
+      #拦截以nick开头的请求
+      path: /management/**
+      serviceId: management-center
+    foreign-route:
+      path: /foreign/**
+      #通过eureka抓饭到响应的服务
+      serviceId: foreign-center
+    email-route:
+      path: /email/**
+      #通过eureka抓饭到响应的服务
+      serviceId: email-center
+
+############################################自定义配置######################################################
+book:
+  zuul:
+    token-filter:
+      #网关权限验证忽略url配置，多个用“,”隔开，如：/user/login,/user/export,/user/import
+      noAuthenticationRoutes: /user/login,/volums/issue_count,/wechat/login,/wechat/sms_code,/wechat/binding

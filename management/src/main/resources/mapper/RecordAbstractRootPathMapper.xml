@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.management.dao.RecordAbstractRootPathDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.management.domain.RecordAbstractRootPath">
+        <id column="ab_id" property="abId" />
+        <result column="ab_cata_log" property="abCataLog" />
+        <result column="ab_parent_dir" property="abParentDir" />
+        <result column="ab_name" property="abName" />
+        <result column="ab_volume" property="abVolume" />
+        <result column="ab_issue" property="abIssue" />
+        <result column="ab_full_path" property="abFullPath" />
+        <result column="ab_isSave" property="abIssave" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ab_id, ab_cata_log, ab_parent_dir, ab_name, ab_volume, ab_issue, ab_full_path, ab_isSave
+    </sql>
+
+    <select id="selectJournalVolumeIssueCountPage" resultType="mpd">
+        SELECT
+          ab_parent_dir abParentDir,ab_volume abVolume,ab_issue abIssue,COUNT(1) abNum
+        FROM
+          fd_record_abstract_root_path
+        WHERE 1=1
+          <if test="pd.abParentDir !=null and pd.abParentDir != ''">
+              AND ab_parent_dir = #{pd.abParentDir}
+          </if>
+        GROUP BY ab_parent_dir,ab_volume,ab_issue
+    </select>
+
+    <select id="selectUnzipDataJournalVolumeIssuePage" resultMap="BaseResultMap">
+        SELECT
+          ab_parent_dir,ab_volume,ab_issue,ab_name,ab_full_path,ab_isSave
+        FROM
+          fd_record_abstract_root_path
+        WHERE 1=1
+          <if test="pd.abParentDir != null and pd.abParentDir != ''">
+              AND ab_parent_dir = #{pd.abParentDir}
+          </if>
+          <if test="pd.abVolume != null and pd.abVolume != ''">
+              AND ab_volume = #{pd.abVolume}
+          </if>
+          <if test="pd.abIssue != null and pd.abIssue != ''">
+              AND ab_issue = #{pd.abIssue}
+          </if>
+    </select>
+
+    <select id="selectJournalVolumeIssueCountList" resultType="com.springcloud.book.management.domain.vo.UnzipCheckExportVO">
+        SELECT
+          ab_parent_dir abParentDir,ab_volume abVolume,ab_issue abIssue,COUNT(1) abNum
+        FROM
+          fd_record_abstract_root_path
+        WHERE 1=1
+        <if test="pd.abParentDir !=null and pd.abParentDir != ''">
+            AND ab_parent_dir = #{pd.abParentDir}
+        </if>
+        GROUP BY ab_parent_dir,ab_volume,ab_issue
+    </select>
+
+</mapper>

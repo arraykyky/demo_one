@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="dashboard" />
+        <module name="decompression" />
+        <module name="emailsystem" />
+        <module name="eureka" />
+        <module name="foreign" />
+        <module name="management" />
+        <module name="zuul" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="dashboard" target="1.8" />
+      <module name="decompression" target="1.8" />
+      <module name="emailsystem" target="1.8" />
+      <module name="eureka" target="1.8" />
+      <module name="foreign" target="1.8" />
+      <module name="management" target="1.8" />
+      <module name="spring-cloud-book" target="1.8" />
+      <module name="zuul" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

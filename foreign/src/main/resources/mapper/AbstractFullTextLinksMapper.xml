@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.AbstractFullTextLinksDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.AbstractFullTextLinks">
+        <id column="url_id" property="urlId" />
+        <result column="url_type" property="urlType" />
+        <result column="url_link" property="urlLink" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        url_id, url_type, url_link
+    </sql>
+
+    <select id="selectOne" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_abstract_full_text_links
+        WHERE
+          url_type = #{urlType}
+    </select>
+
+</mapper>

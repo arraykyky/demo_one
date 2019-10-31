@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.AbstractVolumsCountForJournalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.AbstractVolumsCountForJournal">
+        <id column="volume_count_id" property="volumeCountId" />
+        <result column="journal_id" property="journalId" />
+        <result column="year" property="year" />
+        <result column="volume" property="volume" />
+        <result column="issue" property="issue" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        volume_count_id, journal_id, year, volume, issue
+    </sql>
+
+    <select id="selectCurrentYearJournalVolumeIssue" resultMap="BaseResultMap">
+        SELECT
+          journal_id,`year`,volume,issue
+        FROM
+          fd_abstract_volums_count_for_journal
+        WHERE
+          journal_id = #{journalId}
+        AND
+          `year` = #{year}
+        ORDER BY volume DESC , issue DESC
+    </select>
+
+    <select id="findVolumeIsExist" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_abstract_volums_count_for_journal
+        WHERE
+          journal_id = #{journalId}
+        AND
+          `year` = #{year}
+        <if test="volume != null and volume != ''">
+            AND volume = #{volume}
+        </if>
+        <if test="volume == null or volume == ''" >
+            AND volume = ""
+        </if>
+
+        <if test="issue != null and issue != ''" >
+            AND issue = #{issue}
+        </if>
+        <if test="issue == null or issue == ''" >
+            AND issue = ""
+        </if>
+        LIMIT 1
+    </select>
+
+</mapper>

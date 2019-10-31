@@ -1,0 +1,60 @@
+# java -jar xxxx.jar --spring.profiles.active=dev2 启动第二个配置的项目
+spring:
+  profiles:
+    active: dev1
+---
+spring:
+  profiles: dev1
+  application:
+    name: eureka-server
+server:
+  port: 9001
+eureka:
+  client:
+    register-with-eureka: true #eureka服务不注册到中心
+    fetch-registry: false #检查服务
+    service-url:
+      defaultZone:  http://localhost:9001/eureka/
+  server:
+    enable-self-preservation: false #关闭自我保护
+    eviction-interval-timer-in-ms: 6000 #无效节点清理间隔时间
+    peer-eureka-nodes-update-interval-ms: 60000 #eureka多长时间更新一次数据
+---
+spring:
+  profiles: test
+  application:
+    name: eureka-server
+server:
+  port: 9001
+eureka:
+  client:
+    register-with-eureka: true #eureka服务不注册到中心
+    fetch-registry: false
+    service-url:
+      defaultZone:  http://localhost:9001/eureka/
+      #defaultZone:  http://localhost:9001/eureka/,http://localhost:9003/eureka/
+  server:
+    enable-self-preservation: false #关闭自我保护
+    eviction-interval-timer-in-ms: 6000 #无效节点清理间隔时间
+    peer-eureka-nodes-update-interval-ms: 60000 #eureka多长时间更新一次数据
+---
+#单机部署，该配置已足矣
+spring:
+  profiles: pro
+  application:
+    name: eureka-server
+server:
+  port: 9001
+eureka:
+  client:
+    register-with-eureka: true #eureka服务不注册到中心
+    fetch-registry: false
+    service-url:
+      defaultZone:  http://localhost:9001/eureka/
+  server:
+    enable-self-preservation: false #关闭自我保护
+    eviction-interval-timer-in-ms: 6000 #无效节点清理间隔时间
+    peer-eureka-nodes-update-interval-ms: 60000 #eureka多长时间更新一次数据
+#集群部署方案：
+  #复制上述配置，在上述配置下方以现在的配置格式“---”分开添加新的配置，服务名，端口号可以不变，主要修改配置中心的路径即可
+  #如，http://192.168.1.112:9001/eureka/,http://192.168.1.113:9003/eureka/,http://192.168.1.114:9003/eureka/配置是配置了三台机器做集群

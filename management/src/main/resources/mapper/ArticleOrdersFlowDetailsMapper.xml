@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.management.dao.ArticleOrdersFlowDetailsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.management.domain.ArticleOrdersFlowDetails">
+        <id column="flow_detail_id" property="flowDetailId" />
+        <result column="order_id" property="orderId" />
+        <result column="order_accept_admin_id" property="orderAcceptAdminId" />
+        <result column="order_accept_admin_name" property="orderAcceptAdminName" />
+        <result column="flow_detail_deal_sign" property="flowDetailDealSign" />
+        <result column="flow_detail_deal_note" property="flowDetailDealNote" />
+        <result column="flow_detail_create_time" property="flowDetailCreateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        flow_detail_id, order_id, order_accept_admin_id, order_accept_admin_name, flow_detail_deal_sign, flow_detail_deal_note, flow_detail_create_time
+    </sql>
+
+    <insert id="insertData">
+        insert into fd_article_orders_flow_details(
+               flow_detail_id,
+               order_id,
+               order_accept_admin_id,
+               order_accept_admin_name,
+               flow_detail_deal_sign,
+               flow_detail_deal_note,
+               flow_detail_create_time
+
+       )VALUES (
+               #{flowDetailId},
+               #{orderId},
+               #{orderAcceptAdminId},
+               #{orderAcceptAdminName},
+               #{flowDetailDealSign},
+               #{flowDetailDealNote},
+               #{flowDetailCreateTime}
+       );
+    </insert>
+
+</mapper>

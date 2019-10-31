@@ -1,0 +1,40 @@
+2019-09-09 09:55:53.097  WARN 9660 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/dell/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/dell/.m2/repository/org/json/json/20160810/json-20160810.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2019-09-09 09:55:53.113  INFO 9660 --- [main] c.s.b.foreign.ForeignApplicationTests    : No active profile set, falling back to default profiles: default
+2019-09-09 09:55:54.066  INFO 9660 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-09-09 09:55:54.081  INFO 9660 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-09-09 09:55:54.144  INFO 9660 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 47ms. Found 0 repository interfaces.
+2019-09-09 09:55:54.253  WARN 9660 --- [main] o.s.boot.actuate.endpoint.EndpointId     : Endpoint ID 'service-registry' contains invalid characters, please migrate to a valid format.
+2019-09-09 09:55:54.269  WARN 9660 --- [main] o.s.boot.actuate.endpoint.EndpointId     : Endpoint ID 'hystrix.stream' contains invalid characters, please migrate to a valid format.
+2019-09-09 09:55:54.519  INFO 9660 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=59d1ccd1-9ba3-3a7c-9d0d-d793a2d1266b
+2019-09-09 09:55:54.706  INFO 9660 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$34f110d6] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-09 09:55:54.910  INFO 9660 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'shiroConfig' of type [com.springcloud.book.foreign.config.redis.ShiroConfig$$EnhancerBySpringCGLIB$$d84df6fb] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-09 09:55:55.300  INFO 9660 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'redisSessionDAO' of type [org.crazycake.shiro.RedisSessionDAO] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-09 09:55:55.316  INFO 9660 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'sessionManager' of type [org.apache.shiro.web.session.mgt.DefaultWebSessionManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-09 09:55:55.347  INFO 9660 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-09 09:55:55.347  INFO 9660 --- [main] c.s.b.foreign.config.redis.ShiroConfig   : Shiro Redis starting...
+2019-09-09 09:55:55.378  INFO 9660 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$510b13d3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-09 09:55:55.675  INFO 9660 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-09-09 09:55:56.066  INFO 9660 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-09-09 09:55:57.066  INFO 9660 --- [main] c.s.b.foreign.config.redis.RedisConfig   : redis地址：47.110.154.181:6379
+2019-09-09 09:55:57.144  INFO 9660 --- [main] c.s.b.f.c.solr.MySolrHealthIndicator     : SolrClient加载成功......
+2019-09-09 09:55:57.613  INFO 9660 --- [main] c.s.b.foreign.config.redis.ShiroConfig   : Shiro Redis started
+2019-09-09 09:55:57.785  WARN 9660 --- [main] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2019-09-09 09:55:57.785  INFO 9660 --- [main] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-09-09 09:55:57.801  INFO 9660 --- [main] c.netflix.config.DynamicPropertyFactory  : DynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@34e25492
+2019-09-09 09:55:58.129  WARN 9660 --- [main] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2019-09-09 09:55:58.129  INFO 9660 --- [main] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-09-09 09:55:58.753  INFO 9660 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-09 09:56:00.707  INFO 9660 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2019-09-09 09:56:00.816  INFO 9660 --- [main] c.s.b.foreign.ForeignApplicationTests    : Started ForeignApplicationTests in 8.797 seconds (JVM running for 9.569)
+2019-09-09 09:56:01.019  INFO 9660 --- [Thread-5] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2019-09-09 09:56:01.035  INFO 9660 --- [Thread-5] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application FOREIGN-CENTER with eureka with status DOWN
+2019-09-09 09:56:01.066  INFO 9660 --- [Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2019-09-09 09:56:01.113  INFO 9660 --- [Thread-5] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed

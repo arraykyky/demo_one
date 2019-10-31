@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.DocumentDatabaseDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.DocumentDatabase">
+        <id column="document_database_id" property="documentDatabaseId" />
+        <result column="document_database_real_name" property="documentDatabaseRealName" />
+        <result column="document_database_show_name" property="documentDatabaseShowName" />
+        <result column="document_database_user_id" property="documentDatabaseUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        document_database_id, document_database_real_name, document_database_show_name, document_database_user_id
+    </sql>
+
+    <insert id="insertCurrentUserSetUpDocumentDatabase">
+          insert into fd_document_database (
+            document_database_id,
+            document_database_real_name,
+            document_database_show_name,
+            document_database_user_id
+        )values (
+            #{documentDatabaseId},
+            #{documentDatabaseRealName},
+            #{documentDatabaseShowName},
+            #{documentDatabaseUserId}
+        )
+    </insert>
+
+    <insert id="insertDocumentCollection">
+         insert into ${documentDatabaseRealName} (
+            document_database_id,
+            document_id,
+            document_title
+        )values (
+            #{documentDatabaseId},
+            #{documentId},
+            #{documentTitle}
+        )
+    </insert>
+
+    <update id="createCurrentUserSetUpDocumentDatabase">
+        create table ${documentDatabaseRealName} (
+             document_database_id varchar(255) primary key,
+             document_id varchar(255),
+             document_title varchar(1000)
+        );
+    </update>
+
+    <update id="dropCurrentDocumentDatabase">
+        DROP TABLE ${documentDatabaseRealName}
+    </update>
+
+    <select id="selectCurrentUserMyDocumentStorePage" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_document_database
+        WHERE
+          document_database_user_id = #{pd.documentDatabaseUserId}
+        ORDER BY document_database_real_name DESC
+
+    </select>
+
+    <select id="selectCurrentDocumentPage" resultType="pd">
+        SELECT
+            document_database_id documentDatabaseId,
+            document_id documentId,
+            document_title	documentTitle
+        FROM
+            ${pd.documentDatabaseRealName}
+        WHERE
+            1=1
+    </select>
+
+    <delete id="deleteDocumentCollectedByIds">
+        DELETE
+        FROM
+        ${documentDatabaseRealName}
+        WHERE
+        document_database_id IN
+        <foreach collection="documentDatabaseIdList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

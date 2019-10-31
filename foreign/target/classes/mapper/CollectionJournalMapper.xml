@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.CollectionJournalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.CollectionJournal">
+        <id column="collection_id" property="collectionId" />
+        <result column="collection_journal_id" property="collectionJournalId" />
+        <result column="collection_journal_name" property="collectionJournalName" />
+        <result column="collection_user_id" property="collectionUserId" />
+        <result column="collection_user_name" property="collectionUserName" />
+        <result column="collection_time" property="collectionTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        collection_id, collection_journal_id, collection_journal_name, collection_user_id, collection_user_name, collection_time
+    </sql>
+
+    <insert id="insertJournalCollection">
+        insert into fd_collection_journal (
+            collection_id,
+            collection_journal_id,
+            collection_journal_name,
+            collection_user_id,
+            collection_user_name,
+            collection_time
+        )values(
+            #{collectionId},
+            #{collectionJournalId},
+            #{collectionJournalName},
+            #{collectionUserId},
+            #{collectionUserName},
+            #{collectionTime}
+        )
+    </insert>
+
+    <select id="selectCurrentUserJournalStorePage" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_collection_journal
+        WHERE
+          collection_user_id = #{pd.collectionUserId}
+        ORDER BY collection_time DESC
+    </select>
+
+    <select id="selectJournalIsCollected" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_collection_journal
+        WHERE
+          collection_user_id = #{collectionUserId}
+        AND
+          collection_journal_id = #{collectionJournalId}
+        LIMIT 1
+    </select>
+
+</mapper>

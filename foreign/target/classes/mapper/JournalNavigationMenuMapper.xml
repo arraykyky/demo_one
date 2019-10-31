@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.JournalNavigationMenuDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.JournalNavigationMenu">
+        <id column="menu_id" property="menuId" />
+        <result column="menu_name" property="menuName" />
+        <result column="menu_parent_id" property="menuParentId" />
+        <result column="menu_desc" property="menuDesc" />
+        <result column="menu_value" property="menuValue" />
+        <result column="menu_order" property="menuOrder" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        menu_id, menu_name, menu_parent_id, menu_desc, menu_value, menu_order
+    </sql>
+
+    <select id="selectJournalNavigationMenuByMenuParentId" resultMap="BaseResultMap">
+        SELECT
+          menu_id,menu_name,menu_parent_id,menu_value
+        FROM
+          fd_journal_navigation_menu
+        WHERE
+          menu_parent_id = #{menuParentId}
+        ORDER BY
+          menu_order
+        ASC
+    </select>
+
+</mapper>

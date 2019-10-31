@@ -1,0 +1,88 @@
+server:
+  port: 8002
+spring:
+  application:
+    name: management-center
+  datasource:
+    url: jdbc:mysql://192.168.1.34:3306/dev_book_foreign?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: grl_admin
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 10
+      max-active: 20
+      test-on-borrow: true
+      test-while-idle: true
+  redis:
+    host: 47.110.154.181
+    port: 6379
+    password: book2018@redis
+    database: 12
+    timeout: 60000ms
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9001/eureka/
+#开启熔断
+feign:
+  hystrix:
+    enabled: true
+#负载均衡 当调用某个服务等待时间过长的时候, 对超时报错/熔断生效的是ReadTimeout,ConnectTimeout则表示连接服务的时间,一般不用配置太久,1~2秒左右就可以了
+#如果hystrix.command.default.execution.timeout.enabled
+#为false即不进行熔断，而是根据ribbon的ReadTimeout抛出的异常
+#为true则会有两个执行方法超时的配置,一个就是ribbon的ReadTimeout,
+#一个就是熔断器hystrix的timeoutInMilliseconds, 此时谁的值小谁生效
+#规则：timeoutInMilliseconds > ReadTimeout > ConnectTimeout
+#hystrix的超时时间为:(1 + MaxAutoRetries + MaxAutoRetriesNextServer) * ReadTimeout
+ribbon:
+  #对所有操作请求都进行重试,默认false
+  OkToRetryOnAllOperations: false
+  #负载均衡超时时间，默认值5000
+  ReadTimeout: 120000
+  #ribbon请求连接的超时时间，默认值2000
+  ConnectTimeout: 6000
+  #对当前实例的重试次数，默认0
+  MaxAutoRetries: 0
+  #对切换实例的重试次数，默认1
+  MaxAutoRetriesNextServer: 1
+#熔断
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          #是否开启超时熔断
+          enabled: true
+        isolation:
+          thread:
+            #断路器超时时间，默认1000ms
+            timeoutInMilliseconds: 240000
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.springcloud.book.management.domain;com.springcloud.book.management.config
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      column-like: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+#logging
+logging:
+  level:
+    root: INFO
+    com.book: INFO
+  file: logs/service-handling.log

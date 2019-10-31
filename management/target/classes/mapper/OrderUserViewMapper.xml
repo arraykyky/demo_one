@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.management.dao.OrderUserViewDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.management.domain.OrderUserView">
+        <result column="user_id" property="userId" />
+        <result column="user_ella_id" property="userEllaId" />
+        <result column="user_name" property="userName" />
+        <result column="user_real_name" property="userRealName" />
+        <result column="hospital_id" property="hospitalId" />
+        <result column="order_id" property="orderId" />
+        <result column="abstract_id" property="abstractId" />
+        <result column="article_title" property="articleTitle" />
+        <result column="article_source" property="articleSource" />
+        <result column="order_state" property="orderState" />
+        <result column="email_state" property="emailState" />
+        <result column="order_apply_user_unit" property="orderApplyUserUnit" />
+        <result column="order_apply_user_email" property="orderApplyUserEmail" />
+        <result column="order_apply_time" property="orderApplyTime" />
+        <result column="order_accept_admin_id" property="orderAcceptAdminId" />
+        <result column="order_accept_admin_name" property="orderAcceptAdminName" />
+        <result column="order_final_action_time" property="orderFinalActionTime" />
+        <result column="order_deal_type" property="orderDealType" />
+        <result column="order_num" property="orderNum" />
+        <result column="order_accept_count" property="orderAcceptCount" />
+        <result column="order_handle_type" property="orderHandleType" />
+        <result column="order_accept_time" property="orderAcceptTime" />
+        <result column="order_response_times" property="orderResponseTimes" />
+        <result column="order_efficiency_times" property="orderEfficiencyTimes" />
+        <result column="article_exist_thrid_link" property="articleExistThridLink" />
+        <result column="email_fail_desc" property="emailFailDesc" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, user_ella_id, user_name, user_real_name, hospital_id, order_id, abstract_id, article_title, article_source, order_state, email_state, order_apply_user_unit, order_apply_user_email, order_apply_time, order_accept_admin_id, order_accept_admin_name, order_final_action_time, order_deal_type, order_num, order_accept_count, order_handle_type, order_accept_time, order_response_times, order_efficiency_times, article_exist_thrid_link, email_fail_desc
+    </sql>
+
+    <select id="selectOrderAnalysisPage" resultMap="BaseResultMap">
+        SELECT
+            ov.order_num,
+            ov.order_accept_admin_name,
+            (
+            CASE ov.order_state
+            WHEN "0000" THEN "申请中"
+            WHEN "0001" THEN "处理中"
+            WHEN "0010" THEN "被拒绝"
+            WHEN "0011" THEN "已完成"
+            WHEN "00000" THEN "未找到全文"
+            END
+            )order_state,
+            ov.order_apply_time,
+            ov.order_accept_time,
+            (
+            CASE ov.order_state
+            WHEN "0011" THEN ov.order_final_action_time
+            END
+            ) order_final_action_time,
+            (
+            CASE ov.order_handle_type
+            WHEN 1 THEN "服务订单"
+            WHEN -1 THEN "系统订单"
+            END
+            )orderHandleTypeDesc,
+            ROUND(ov.order_response_times/60000,0) order_response_times,
+            ROUND(ov.order_efficiency_times/60000,0) order_efficiency_times
+        FROM
+          fd_order_user_view ov
+        WHERE 1=1
+            <if test="pd.start != null and pd.start != '' and pd.end != null and pd.end != ''">
+                AND ov.order_apply_time BETWEEN #{pd.start} AND #{pd.end}
+            </if>
+            <if test="pd.orderAcceptAdminId != null and pd.orderAcceptAdminId != ''">
+                AND ov.order_accept_admin_id = #{pd.orderAcceptAdminId}
+            </if>
+        ORDER BY
+          ov.order_handle_type desc,ov.order_apply_time ASC
+    </select>
+
+    <select id="selectAdminOrderAnalysisPage" resultType="mpd">
+        SELECT
+            ov.order_accept_admin_id id,
+            ov.order_accept_admin_name adminName,
+            COUNT(ov.order_id) totalOrders,
+            SUM(ov.order_state = "0001") acceptCount,
+            SUM(ov.order_state = "0011") finishedCount,
+            SUM(ov.order_state = "0010") refuseCount,
+            SUM(ov.email_state = "1111") sendSuccesCount,
+            SUM(ov.email_state = "0001") sendFailCount
+        FROM
+          fd_order_user_view ov
+        WHERE
+          ov.order_handle_type = 1
+        AND
+          ov.order_state != "0000"
+            <if test="pd.start != null and pd.start != '' and pd.end != null and pd.end != ''">
+                AND ov.order_apply_time BETWEEN #{pd.start} AND #{pd.end}
+            </if>
+            <if test="pd.timeSlot != null and pd.timeSlot != ''">
+                AND ov.order_efficiency_times BETWEEN 0 AND  #{pd.timeSlot}
+            </if>
+        GROUP BY
+          ov.order_accept_admin_id
+    </select>
+
+    <select id="selectAdminOrderAnalysisTotalData" resultType="mpd">
+        SELECT
+            COUNT(ov.order_id) totalOrders,
+            SUM(ov.order_state = "0001") acceptCount,
+            SUM(ov.order_state = "0011") finishedCount,
+            SUM(ov.order_state = "0010") refuseCount,
+            SUM(ov.email_state = "1111") sendSuccesCount,
+            SUM(ov.email_state = "0001") sendFailCount
+        FROM
+          fd_order_user_view ov
+        WHERE
+          ov.order_handle_type = 1
+        AND
+          ov.order_state != "0000"
+          <if test="start != null and start != '' and end != null and end != ''">
+              AND ov.order_apply_time BETWEEN #{start} AND #{end}
+          </if>
+          <if test="timeSlot != null and timeSlot != ''">
+              AND ov.order_efficiency_times BETWEEN 0 AND  #{timeSlot}
+          </if>
+        LIMIT 1
+    </select>
+
+    <select id="selectUnitOrderAnalysisDataPage" resultType="mpd">
+        SELECT
+            ov.hospital_id hospitalId,
+            ov.order_apply_user_unit orderApplyUserUnit,
+            COUNT(ov.order_id) orderCount,
+            SUM(ov.order_handle_type = 1) adminOrderCount,<!--客服处理订单数-->
+            SUM(ov.order_handle_type = -1) systemOrderCount,<!--系统处理订单数-->
+            SUM(ov.order_state = "0000") applyCount,<!--订单申请总数-包含系统的和客服的-->
+            SUM(ov.order_handle_type = 1 AND ov.order_state = "0000") adminApplyCount,<!--客服订单申请数-->
+            SUM(ov.order_handle_type = -1 AND ov.order_state = "0000") systemApplyCount,<!--系统订单申请数-->
+            SUM(ov.order_state = "0001" OR ov.order_state = "00000") dealCount, <!--客服处理-->
+            SUM(ov.order_state = "0010") refuseCount,<!--客服处理-->
+            SUM(ov.order_state = "0011") finishedCount,<!--订单完成总数 - 包含系统的和客服的-->
+            SUM(ov.order_handle_type = 1 AND ov.order_state = "0011") adminFinishedCount,<!--客服订单完成数-->
+            SUM(ov.order_handle_type = -1 AND ov.order_state = "0011") systemFinishedCount,<!--系统订单完成数-->
+            SUM(ov.email_state = "1111") sendSuccessTotalCount,  <!--邮件发送成功总数数-包含系统处理的全文邮件和客服处理的拒绝邮件或全文邮件-->
+            SUM(ov.order_state = "0010" AND ov.email_state = "1111") refuseSendSuccessCount,  <!--拒绝订单邮件发送成功数-客服处理的(系统不会拒绝)-->
+            SUM(ov.order_handle_type = -1 AND ov.order_state = "0011" AND ov.email_state = "1111") systemFullTextSendSuccessCount,<!--系统全文邮件发送成功数-->
+            SUM(ov.order_handle_type = 1 AND ov.order_state = "0011" AND ov.email_state = "1111") adminFullTextSendSuccessCount,<!--客服全文邮件发送成功数-->
+            SUM(ov.email_state = "0001") sendFailCount, <!--邮件发送失败总数数-包含系统处理的全文邮件和客服处理的拒绝邮件或全文邮件-->
+            SUM(ov.order_state = "0010" AND ov.email_state = "0001") refuseSendFailCount,  <!--拒绝订单邮件发送失败数-客服处理的(系统不会拒绝)-->
+            SUM(ov.order_handle_type = -1 AND ov.order_state = "0011" AND ov.email_state = "0001") systemFullTextSendFailCount,<!--系统全文邮件发送失败数-->
+            SUM(ov.order_handle_type = 1 AND ov.order_state = "0011" AND ov.email_state = "0001") adminFullTextSendFailCount,<!--客服全文邮件发送失败数-->
+            SUM(ov.order_handle_type = -1 AND ov.email_state = "1111") systemOrderSendSuccessCount,<!--系统全文邮件发送成功数-->
+            SUM(ov.order_handle_type = -1 AND ov.email_state = "0001") systemOrderSendFailCount <!--系统全文邮件发送失败数-->
+        FROM
+          fd_order_user_view ov
+        WHERE 1=1
+            <if test="pd.start != null and pd.start != '' and pd.end != null and pd.end != ''">
+                AND ov.order_apply_time BETWEEN #{pd.start} AND #{pd.end}
+            </if>
+            <if test="pd.orderApplyUserUnit != null and pd.orderApplyUserUnit !=''">
+                AND ov.order_apply_user_unit like concat('%',#{pd.orderApplyUserUnit},'%')
+            </if>
+        GROUP BY
+          ov.hospital_id
+    </select>
+
+</mapper>

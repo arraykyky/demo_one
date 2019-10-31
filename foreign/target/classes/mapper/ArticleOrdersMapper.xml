@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.ArticleOrdersDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.ArticleOrders">
+        <id column="order_id" property="orderId" />
+        <result column="abstract_id" property="abstractId" />
+        <result column="article_title" property="articleTitle" />
+        <result column="article_source" property="articleSource" />
+        <result column="article_periodical_num" property="articlePeriodicalNum" />
+        <result column="order_state" property="orderState" />
+        <result column="email_state" property="emailState" />
+        <result column="order_apply_user_id" property="orderApplyUserId" />
+        <result column="order_apply_user_name" property="orderApplyUserName" />
+        <result column="order_apply_user_unit" property="orderApplyUserUnit" />
+        <result column="order_apply_user_phone" property="orderApplyUserPhone" />
+        <result column="order_apply_user_email" property="orderApplyUserEmail" />
+        <result column="order_apply_time" property="orderApplyTime" />
+        <result column="order_accept_admin_id" property="orderAcceptAdminId" />
+        <result column="order_accept_admin_name" property="orderAcceptAdminName" />
+        <result column="order_final_action_time" property="orderFinalActionTime" />
+        <result column="order_deal_type" property="orderDealType" />
+        <result column="order_num" property="orderNum" />
+        <result column="order_accept_count" property="orderAcceptCount" />
+        <result column="order_handle_type" property="orderHandleType" />
+        <result column="order_accept_time" property="orderAcceptTime" />
+        <result column="order_response_times" property="orderResponseTimes" />
+        <result column="order_efficiency_times" property="orderEfficiencyTimes" />
+        <result column="email_fail_desc" property="emailFailDesc" />
+        <result column="article_exist_thrid_link" property="articleExistThridLink" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_id AS orderId,
+        article_title AS articleTitle,
+        article_source AS articleSource,
+        article_periodical_num AS articlePeriodicalNum,
+        order_state AS orderState,
+        email_state AS emailState,
+        email_fail_desc AS emailFailDesc,
+        order_apply_user_id AS orderApplyUserId,
+        order_apply_user_name AS orderApplyUserName,
+        order_apply_user_unit AS orderApplyUserUnit,
+        order_apply_user_phone AS orderApplyUserPhone,
+        order_apply_user_email AS orderApplyUserEmail,
+        order_apply_time AS orderApplyTime,
+        order_accept_admin_id AS orderAcceptAdminId,
+        order_accept_admin_name AS orderAcceptAdminName,
+        order_final_action_time AS orderFinalActionTime,
+        order_deal_type AS orderDealType,
+        order_num AS orderNum,
+        abstract_id AS abstractId,
+        order_accept_count AS orderAcceptCount,
+        order_handle_type AS orderHandleType,
+        order_accept_time AS orderAcceptTime,
+        order_response_times AS orderResponseTimes,
+        order_efficiency_times AS orderEfficiencyTimes,
+        article_exist_thrid_link AS articleExistThridLink
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Column_Dest_List">
+        order_id AS orderId,
+        article_title AS articleTitle,
+        article_source AS articleSource,
+        article_periodical_num AS articlePeriodicalNum,
+        email_fail_desc AS emailFailDesc,
+        order_apply_user_id AS orderApplyUserId,
+        order_apply_user_name AS orderApplyUserName,
+        order_apply_user_unit AS orderApplyUserUnit,
+        order_apply_user_phone AS orderApplyUserPhone,
+        order_apply_user_email AS orderApplyUserEmail,
+        order_apply_time AS orderApplyTime,
+        order_accept_admin_id AS orderAcceptAdminId,
+        order_accept_admin_name AS orderAcceptAdminName,
+        order_final_action_time AS orderFinalActionTime,
+        order_num AS orderNum,
+        abstract_id AS abstractId,
+        order_accept_count AS orderAcceptCount,
+        order_accept_time AS orderAcceptTime,
+        order_response_times AS orderResponseTimes,
+        order_efficiency_times AS orderEfficiencyTimes
+    </sql>
+
+    <sql id="Column_Dest">
+            CASE order_state
+               WHEN "0000" THEN "申请中"
+               WHEN "0011" THEN "已完成"
+               WHEN "0001" THEN "处理中"
+               WHEN "0010" THEN "被拒绝"
+            END AS orderState,
+            CASE order_deal_type
+                WHEN "1100" THEN "本地处理"
+                WHEN "1111" THEN "馆际互借"
+            END AS orderDealType,
+            CASE email_state
+                WHEN "0001" THEN "发送失败"
+                WHEN "0000" THEN "未发送"
+                WHEN "1111" THEN "发送成功"
+            END emailState,
+            CASE order_handle_type
+                WHEN 1 THEN "客服处理订单"
+                WHEN -1 THEN "系统处理订单"
+            END AS orderHandleType,
+            CASE article_exist_thrid_link
+                WHEN 1 THEN "是"
+                WHEN -1 THEN "否"
+            END AS articleExistThridLink
+    </sql>
+
+    <select id="selectMyOrderList" resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          fd_article_orders
+        WHERE
+          order_apply_user_id = #{pd.orderApplyUserId}
+        <if test="pd.orderState != null and pd.orderState != ''">
+            AND
+            order_state = #{pd.orderState}
+        </if>
+        ORDER BY order_apply_time DESC
+    </select>
+
+    <select id="selectHospitalOrderList" resultType="pd">
+        SELECT
+          <include refid="Column_Dest_List"/>,
+          <include refid="Column_Dest"/>,
+          u.user_real_name AS realName
+        FROM
+          fd_user u,fd_article_orders o
+        WHERE
+          u.ella_user_id = o.order_apply_user_id
+        and
+          u.hospital_id = #{pd.hospitalId}
+    </select>
+
+    <select id="selectHospitalOrderReportList" resultType="pd">
+        SELECT
+            r.time applyTime,
+            r.totalCount,
+            r.applyingCount,
+            r.dealingCount,
+            r.finshedCount,
+            r.refusedCount,
+            r.noFullTextCount,
+            r.notSend,
+            r.sendFailed,
+            r.sendSuccess
+        FROM
+            (SELECT
+              STR_TO_DATE(order_apply_time,"%Y-%m-%d") AS time,
+              COUNT(o.order_id) totalCount,
+              SUM(o.order_state="0000") AS applyingCount,
+              sum(o.order_state="0001") AS dealingCount,
+              sum(o.order_state="0011") AS finshedCount,
+              sum(o.order_state="0010") AS refusedCount,
+              sum(o.order_state="00000") AS noFullTextCount,
+              SUM(o.email_state="0000") AS notSend,
+              SUM(o.email_state="0001") AS sendFailed,
+              SUM(o.email_state="1111") AS sendSuccess
+            FROM
+              fd_article_orders o,fd_user u
+            WHERE
+              o.order_apply_user_id = u.ella_user_id and u.hospital_id = #{pd.hospitalId}
+            GROUP BY
+              STR_TO_DATE(o.order_apply_time,"%Y-%m-%d")
+            ) r
+        ORDER BY r.time DESC
+    </select>
+
+    <insert id="insertData" >
+        insert into fd_article_orders(
+              order_id,
+              abstract_id,
+              article_title,
+              article_source,
+              article_periodical_num,
+              order_state,
+              email_state,
+              order_apply_user_id,
+              order_apply_user_name,
+              order_apply_user_unit,
+              order_apply_user_phone,
+              order_apply_user_email,
+              order_apply_time,
+              order_deal_type,
+              order_num,
+              order_handle_type,
+              article_exist_thrid_link
+        )VALUES (
+              #{orderId},
+              #{abstractId},
+              #{articleTitle},
+              #{articleSource},
+              #{articlePeriodicalNum},
+              #{orderState},
+              #{emailState},
+              #{orderApplyUserId},
+              #{orderApplyUserName},
+              #{orderApplyUserUnit},
+              #{orderApplyUserPhone},
+              #{orderApplyUserEmail},
+              #{orderApplyTime},
+              #{orderDealType},
+              #{orderNum},
+              #{orderHandleType},
+              #{articleExistThridLink}
+        );
+    </insert>
+
+    <select id="selectOne" resultMap="BaseResultMap">
+          SELECT
+          *
+        FROM
+          fd_article_orders
+        WHERE
+          order_apply_user_email = #{orderApplyUserEmail}
+        and
+          abstract_id = #{abstractId}
+        ORDER BY
+          order_apply_time DESC
+        LIMIT 1
+    </select>
+
+</mapper>

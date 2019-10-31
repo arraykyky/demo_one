@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.SearchesHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.SearchesHistory">
+        <id column="searches_id" property="searchesId" />
+        <result column="searches_num" property="searchesNum" />
+        <result column="searches_statement" property="searchesStatement" />
+        <result column="searches_counts" property="searchesCounts" />
+        <result column="searches_userId" property="searchesUserid" />
+        <result column="searches_delete" property="searchesDelete" />
+        <result column="searches_sql" property="searchesSql" />
+        <result column="searches_time" property="searchesTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        searches_id, searches_num, searches_statement, searches_counts, searches_userId, searches_delete, searches_sql, searches_time
+    </sql>
+    <insert id="insertOne">
+        INSERT INTO
+          fd_searches_history  (
+            searches_id,
+            searches_num,
+            searches_statement,
+            searches_counts,
+            searches_userId,
+            searches_sql,
+            searches_time
+        )  VALUES  (
+            #{searchesId},
+            #{searchesNum},
+            #{searchesStatement},
+            #{searchesCounts},
+            #{searchesUserid},
+            #{searchesSql},
+            #{searchesTime}
+        )
+    </insert>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT( 1 ) FROM fd_searches_history WHERE searches_userId = #{searchesUserid}
+    </select>
+
+    <select id="selectCurrentUserSearchHistory" resultMap="BaseResultMap">
+        SELECT * FROM fd_searches_history WHERE searches_userId = #{vo.searchesUserid} and searches_delete !=1 ORDER BY searches_time DESC
+    </select>
+
+    <update id="updateHistorySearchToDeletedBySearchesId">
+        UPDATE fd_searches_history SET searches_delete = 1 WHERE searches_id = #{searchesId}
+    </update>
+
+    <update id="updateHistorySearchToDeletedBySearchesUserId">
+        UPDATE fd_searches_history SET searches_delete = 1 WHERE searches_userId = #{searchesUserid}
+    </update>
+
+</mapper>

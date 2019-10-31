@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Happy Work</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .form {
+            margin: 0 auto;
+            width: 450px;
+            height: 135px;
+            border: 1px solid #F00;
+            /*水平据中*/
+        }
+        
+        .import {
+            margin: 0 auto;
+        }
+        
+        .select {
+            outline: none;
+            height: 20px;
+            line-height: 40px;
+            width: 260px;
+        }
+        
+        .tips {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        
+        .loading {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            /* left: 0;
+            top: 0; */
+        }
+        
+        .loading img {
+            width: 456px;
+            height: 444px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            opacity: 0.5;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function() {
+            $("#uploadFile").click(function() {
+                $('.tips').css('display', 'block')
+                var zipFilePath = $("#zipFilePath").val();
+                var unzipToCataLog = $("#unzipToCataLog").val();
+                $.ajax({
+                    url: "/unzip/custom",
+                    type: 'get',
+                    dataType: "json",
+                    data: {
+                        "zipFilePath": zipFilePath,
+                        "unzipToCataLog": unzipToCataLog
+                    },
+                    success: function(data) {
+                        alert(data.responseText);
+                        $('.tips').css('display', 'none')
+                    },
+                    error: function(data) {
+                        alert(data.responseText);
+                        $('.tips').css('display', 'none')
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="form" style="margin-top:268px;">
+        <form id="unitArticleEmport" action="/unzip/custom">
+            <br />
+            <span style="margin-left:35px;">
+                压缩文件路径：<input id="zipFilePath" class="select" name="zipFilePath" />
+                <br />
+            </span>
+            <span style="margin-left:35px;">
+                解压文件目录：<input id="unzipToCataLog" class="select" name="unzipToCataLog" />
+            </span>
+            <span style="display:block;text-align:center;margin-top:15px;">
+                <input id="uploadFile" class="uploadFile" type="button" value="开始解压" style="width:100px" />
+            </span>
+        </form>
+    </div>
+    <div class="tips">
+        <div class="loading">
+            <img src="./timg.gif">
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.management.dao.JournalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.management.domain.Journal">
+        <id column="journal_id" property="journalId" />
+        <result column="NLM_catalog_record" property="nlmCatalogRecord" />
+        <result column="NLM_ID" property="nlmId" />
+        <result column="date_created" property="dateCreated" />
+        <result column="date_revised" property="dateRevised" />
+        <result column="date_authorized" property="dateAuthorized" />
+        <result column="date_completed" property="dateCompleted" />
+        <result column="date_revised_major" property="dateRevisedMajor" />
+        <result column="title_main" property="titleMain" />
+        <result column="title_alternate" property="titleAlternate" />
+        <result column="NLM_title_abbreviation" property="nlmTitleAbbreviation" />
+        <result column="ISO_abbreviation" property="isoAbbreviation" />
+        <result column="authors" property="authors" />
+        <result column="resource_type" property="resourceType" />
+        <result column="issuance" property="issuance" />
+        <result column="resource_unit" property="resourceUnit" />
+        <result column="content_type" property="contentType" />
+        <result column="media_type" property="mediaType" />
+        <result column="carrier_type" property="carrierType" />
+        <result column="publication_types" property="publicationTypes" />
+        <result column="note" property="note" />
+        <result column="mesh_headings" property="meshHeadings" />
+        <result column="country" property="country" />
+        <result column="publisher" property="publisher" />
+        <result column="publication_first_year" property="publicationFirstYear" />
+        <result column="publication_end_year" property="publicationEndYear" />
+        <result column="dates_serial_publication" property="datesSerialPublication" />
+        <result column="frequency" property="frequency" />
+        <result column="language" property="language" />
+        <result column="physical_description" property="physicalDescription" />
+        <result column="LCCN" property="lccn" />
+        <result column="ISSN_E" property="issnE" />
+        <result column="ISSN_P" property="issnP" />
+        <result column="ISSN_L" property="issnL" />
+        <result column="ISSN_U" property="issnU" />
+        <result column="coden" property="coden" />
+        <result column="recent_IF" property="recentIf" />
+        <result column="all_IFs" property="allIfs" />
+        <result column="e_linck" property="eLinck" />
+        <result column="classification" property="classification" />
+        <result column="OCLC" property="oclc" />
+        <result column="DNLM" property="dnlm" />
+        <result column="title_related" property="titleRelated" />
+        <result column="journal_official_URL" property="journalOfficialUrl" />
+        <result column="index_sources" property="indexSources" />
+        <result column="indexes" property="indexes" />
+        <result column="title_ch" property="titleCh" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        journal_id, NLM_catalog_record, NLM_ID, date_created, date_revised, date_authorized, date_completed, date_revised_major, title_main, title_alternate, NLM_title_abbreviation, ISO_abbreviation, authors, resource_type, issuance, resource_unit, content_type, media_type, carrier_type, publication_types, note, mesh_headings, country, publisher, publication_first_year, publication_end_year, dates_serial_publication, frequency, language, physical_description, LCCN, ISSN_E, ISSN_P, ISSN_L, ISSN_U, coden, recent_IF, all_IFs, e_linck, classification, OCLC, DNLM, title_related, journal_official_URL, index_sources, indexes, title_ch
+    </sql>
+
+    <select id="getJournalMenuList" resultType="mpd">
+        SELECT
+          title_main journalName,NLM_ID abParentDir
+        FROM
+          fd_journal
+    </select>
+
+</mapper>

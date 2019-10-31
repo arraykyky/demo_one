@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.emailsystem.dao.ArticleOrdersDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.emailsystem.domain.ArticleOrders">
+        <id column="order_id" property="orderId" />
+        <result column="abstract_id" property="abstractId" />
+        <result column="article_title" property="articleTitle" />
+        <result column="article_source" property="articleSource" />
+        <result column="article_periodical_num" property="articlePeriodicalNum" />
+        <result column="order_state" property="orderState" />
+        <result column="email_state" property="emailState" />
+        <result column="order_apply_user_id" property="orderApplyUserId" />
+        <result column="order_apply_user_name" property="orderApplyUserName" />
+        <result column="order_apply_user_unit" property="orderApplyUserUnit" />
+        <result column="order_apply_user_phone" property="orderApplyUserPhone" />
+        <result column="order_apply_user_email" property="orderApplyUserEmail" />
+        <result column="order_apply_time" property="orderApplyTime" />
+        <result column="order_accept_admin_id" property="orderAcceptAdminId" />
+        <result column="order_accept_admin_name" property="orderAcceptAdminName" />
+        <result column="order_final_action_time" property="orderFinalActionTime" />
+        <result column="order_deal_type" property="orderDealType" />
+        <result column="order_num" property="orderNum" />
+        <result column="order_accept_count" property="orderAcceptCount" />
+        <result column="order_handle_type" property="orderHandleType" />
+        <result column="order_accept_time" property="orderAcceptTime" />
+        <result column="order_response_times" property="orderResponseTimes" />
+        <result column="order_efficiency_times" property="orderEfficiencyTimes" />
+        <result column="email_fail_desc" property="emailFailDesc" />
+        <result column="article_exist_thrid_link" property="articleExistThridLink" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_id, abstract_id, article_title, article_source, article_periodical_num, order_state, email_state, order_apply_user_id, order_apply_user_name, order_apply_user_unit, order_apply_user_phone, order_apply_user_email, order_apply_time, order_accept_admin_id, order_accept_admin_name, order_final_action_time, order_deal_type, order_num, order_accept_count, order_handle_type, order_accept_time, order_response_times, order_efficiency_times, email_fail_desc, article_exist_thrid_link
+    </sql>
+
+</mapper>

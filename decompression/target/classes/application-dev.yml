@@ -1,0 +1,40 @@
+server:
+  port: 8808
+spring:
+  application:
+    name: foreign-center
+  datasource:
+    url: jdbc:mysql://192.168.1.34:3306/dev_book_foreign?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: grl_admin
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 10
+      max-active: 20
+      test-on-borrow: true
+      test-while-idle: true
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.springcloud.book.decompression.domain
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      column-like: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+#logging
+logging:
+  level:
+    root: INFO
+    com.springcloud.book.decompression: error
+  file: logs/decompression.log
+
+unzip:
+  environment:  dev
+  zip-file-path:  E:\\zipTest
+  unzip-to-cata-log:  2019

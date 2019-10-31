@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.decompression.dao.UnzipDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.decompression.domain.Unzip">
+        <id column="unzip_id" property="unzipId" />
+        <result column="unzip_time_position" property="unzipTimePosition" />
+        <result column="unzip_date_time_position" property="unzipDateTimePosition" />
+        <result column="unzip_catalog_set" property="unzipCatalogSet" />
+        <result column="unzip_catalog_set_is_save" property="unzipCatalogSetIsSave"/>
+        <result column="unzip_environment" property="unzipEnvironment" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        unzip_id, unzip_time_position, unzip_date_time_position, unzip_catalog_set,unzip_catalog_set_is_save, unzip_environment
+    </sql>
+    <select id="selectByType" resultMap="BaseResultMap">
+        select
+          *
+        from
+          fd_unzip
+        where
+          unzip_environment = #{unzipEnvironment}
+    </select>
+
+</mapper>

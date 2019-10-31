@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.management.dao.SolrStatisticsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.management.domain.SolrStatistics">
+        <id column="statistics_id" property="statisticsId" />
+        <result column="statistics_type" property="statisticsType" />
+        <result column="statistics_value" property="statisticsValue" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        statistics_id, statistics_type, statistics_value
+    </sql>
+
+    <select id="selectHospitalStatisticsStandardPage" parameterType="mpd" resultType="mpd">
+        SELECT
+          h.hi_name hospitalName,s.statistics_id statisticsId, s.statistics_value statisticsValue,s.statistics_type statisticsType
+        FROM
+          fd_hospital_name_abbreviation_info h,fd_solr_statistics s
+        WHERE
+          h.hi_abbreviation = s.statistics_type
+          <if test="mpd.hospitalName != null and mpd.hospitalName != ''">
+              AND h.hi_name LIKE CONCAT("%",#{mpd.hospitalName},"%")
+          </if>
+    </select>
+
+    <select id="selectStatisticsStandardByType" resultMap="BaseResultMap">
+        select * from fd_solr_statistics where statistics_type = #{statisticsType}
+    </select>
+
+</mapper>

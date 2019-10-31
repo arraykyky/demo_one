@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springcloud.book.foreign.dao.FullTextUploadFlowDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springcloud.book.foreign.domain.FullTextUploadFlow">
+        <id column="upload_flow_id" property="uploadFlowId" />
+        <result column="abstract_id" property="abstractId" />
+        <result column="id" property="id" />
+        <result column="upload_time" property="uploadTime" />
+        <result column="upload_file_url" property="uploadFileUrl" />
+        <result column="file_path_url" property="filePathUrl"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        upload_flow_id, abstract_id, id, upload_time, upload_file_url,file_path_url
+    </sql>
+
+    <select id="selectByAbstractId" resultMap="BaseResultMap">
+        select
+          *
+        from
+          fd_full_text_upload_flow
+        where
+          abstract_id = #{abstractId}
+        ORDER BY
+          upload_time
+        LIMIT 1
+    </select>
+
+</mapper>
